@@ -1,7 +1,7 @@
 <img src="https://github.com/Odoo-mobile/framework/blob/master/odoo_mobile.png" alt="Odoo Mobile"/>
-<br/>v2.2.0 (Build 6)
+<br/>v2.3.0 (Build 7)
 
-Odoo Mobile v2.2.0 (Framework)
+Odoo Mobile v2.3.0 (Framework)
 ==============================
 
 Odoo Mobile is open-source framework allows you to integrate Odoo into your Android app.
@@ -21,6 +21,14 @@ It has pre-developed services,providers, controls and more other features to mak
 CHANGELOG
 =========
 
+- November 2016
+    - odoo-rpc-v3 source merged with Framework
+    - Added Odoo 10.0 support
+    - Minor bug fixes
+    - Runtime model registry (No need to register each models in BaseModel class)
+        Note: With Instant Run registry will not work in Debug mode, but it will work fine in Released mode 
+        *Disable Instant Run https://goo.gl/lsfhq9*
+    
 - June 2016
     - Sync performance improved
     - Easy relation record creation (Fix for: https://github.com/Odoo-mobile/framework/issues/138) 
@@ -33,6 +41,7 @@ SUPPORTED ODOO VERSIONS
 - [x] Odoo 7.0
 - [x] Odoo 8.0
 - [x] Odoo 9.0
+- [x] Odoo 10.0
 
 HOW TO START
 ============
