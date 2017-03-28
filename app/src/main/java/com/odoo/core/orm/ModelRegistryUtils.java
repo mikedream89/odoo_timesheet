@@ -5,9 +5,12 @@ import android.content.Context;
 import com.odoo.App;
 import com.odoo.core.support.OUser;
 
+import java.io.File;
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 
 import dalvik.system.DexFile;
 
@@ -17,16 +20,38 @@ public class ModelRegistryUtils {
 
     public void makeReady(Context context) {
         try {
-            DexFile dexFile = new DexFile(context.getPackageCodePath());
-            for (Enumeration<String> item = dexFile.entries(); item.hasMoreElements(); ) {
-                String element = item.nextElement();
-                if (element.startsWith(App.class.getPackage().getName())) {
-                    Class<? extends OModel> clsName = (Class<? extends OModel>) Class.forName(element);
-                    if (clsName != null && clsName.getSuperclass() != null &&
-                            OModel.class.isAssignableFrom(clsName.getSuperclass())) {
-                        String modelName = getModelName(context, clsName);
-                        if (modelName != null) {
-                            this.models.put(modelName, clsName);
+            if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.KITKAT_WATCH) {
+                File instantRunDir = new File(context.getFilesDir(), "instant-run/dex");
+                if (instantRunDir.exists()) {
+                    for (File dexPath : instantRunDir.listFiles()) {
+                        DexFile dex = new DexFile(dexPath);
+                        for (Enumeration<String> entries = dex.entries(); entries.hasMoreElements(); ) {
+                            String element = entries.nextElement();
+                            if (element.startsWith(App.class.getPackage().getName())) {
+                                Class<? extends OModel> clsName = (Class<? extends OModel>) Class.forName(element);
+                                if (clsName != null && clsName.getSuperclass() != null &&
+                                        OModel.class.isAssignableFrom(clsName.getSuperclass())) {
+                                    String modelName = getModelName(context, clsName);
+                                    if (modelName != null) {
+                                        this.models.put(modelName, clsName);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                DexFile dexFile = new DexFile(context.getPackageCodePath());
+                for (Enumeration<String> item = dexFile.entries(); item.hasMoreElements(); ) {
+                    String element = item.nextElement();
+                    if (element.startsWith(App.class.getPackage().getName())) {
+                        Class<? extends OModel> clsName = (Class<? extends OModel>) Class.forName(element);
+                        if (clsName != null && clsName.getSuperclass() != null &&
+                                OModel.class.isAssignableFrom(clsName.getSuperclass())) {
+                            String modelName = getModelName(context, clsName);
+                            if (modelName != null) {
+                                this.models.put(modelName, clsName);
+                            }
                         }
                     }
                 }
