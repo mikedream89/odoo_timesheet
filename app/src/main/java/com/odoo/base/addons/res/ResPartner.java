@@ -22,6 +22,7 @@ package com.odoo.base.addons.res;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.os.AsyncTask;
 
 import com.odoo.BuildConfig;
 import com.odoo.core.orm.ODataRow;
@@ -33,6 +34,8 @@ import com.odoo.core.orm.fields.types.OBlob;
 import com.odoo.core.orm.fields.types.OBoolean;
 import com.odoo.core.orm.fields.types.OText;
 import com.odoo.core.orm.fields.types.OVarchar;
+import com.odoo.core.rpc.helper.ODomain;
+import com.odoo.core.rpc.helper.OdooFields;
 import com.odoo.core.support.OUser;
 
 import java.util.ArrayList;
@@ -123,5 +126,34 @@ public class ResPartner extends OModel {
     @Override
     public void onModelUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Execute upgrade script
+    }
+
+    public void searchOnServerByDRL(final String drl_id, final BaseAbstractListener listener) {
+        new AsyncTask<Void, Void, List<ODataRow>>() {
+            @Override
+            protected List<ODataRow> doInBackground(Void... params) {
+                try {
+                    if (drl_id.equals("false")) {
+                        return null;
+                    }
+                    OdooFields fields = new OdooFields(getColumns());
+                    ODomain domain = new ODomain();
+                    List<ODataRow> results = getServerDataHelper().searchRecords(
+                            fields, domain, 10);
+                    return results;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(List<ODataRow> list) {
+                super.onPostExecute(list);
+                if (listener != null) {
+                    listener.OnSuccessful(list);
+                }
+            }
+        }.execute();
     }
 }

@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import com.odoo.R;
 import com.odoo.SettingsActivity;
+import com.odoo.addons.timesheet.Test;
 import com.odoo.config.Addons;
 import com.odoo.core.account.Profile;
 import com.odoo.core.support.addons.OAddon;
@@ -36,6 +37,8 @@ import com.odoo.core.support.drawer.ODrawerItem;
 import com.odoo.core.utils.OControls;
 import com.odoo.core.utils.OPreferenceManager;
 import com.odoo.core.utils.OResource;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +72,7 @@ public class DrawerUtils {
         settings.add(new ODrawerItem(key).setTitle(OResource.string(context, R.string.label_settings))
                 .setIcon(R.drawable.ic_action_settings)
                 .setInstance(SettingsActivity.class));
+        
         return settings;
     }
 

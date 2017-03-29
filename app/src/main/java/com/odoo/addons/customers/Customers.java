@@ -39,6 +39,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.odoo.R;
+import com.odoo.addons.timesheet.Test;
 import com.odoo.base.addons.res.ResPartner;
 import com.odoo.core.orm.ODataRow;
 import com.odoo.core.support.addons.fragment.BaseFragment;
@@ -198,6 +199,10 @@ public class Customers extends BaseFragment implements ISyncStatusObserverListen
                 .setIcon(R.drawable.ic_action_company)
                 .setExtra(extra(Type.Company))
                 .setInstance(new Customers()));
+        items.add(new ODrawerItem(KEY).setTitle("ssss")
+                .setIcon(R.drawable.ic_action_company)
+                .setExtra(extra(Type.Company))
+                .setInstance(new Test()));
         return items;
     }
 

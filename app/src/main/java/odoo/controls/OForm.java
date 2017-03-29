@@ -46,6 +46,7 @@ import com.odoo.core.orm.fields.utils.DomainFilterParser;
 import com.odoo.core.utils.OResource;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class OForm extends LinearLayout {
     public static final String TAG = OForm.class.getSimpleName();
@@ -173,8 +174,13 @@ public class OForm extends LinearLayout {
                 c.initControl();
                 Object val = c.getValue();
                 if (mRecord != null) {
-                    if (mRecord.contains(c.getFieldName()))
-                        val = mRecord.get(c.getFieldName());
+                    if (mRecord.contains(c.getFieldName())){
+                        if (column.getRelationType() == OColumn.RelationType.ManyToOne && !mRecord.get(c.getFieldName()).equals("false")) {
+                            val = ((List<Object>)mRecord.get(c.getFieldName())).get(1);
+                        } else {
+                            val = mRecord.get(c.getFieldName());
+                        }
+                    }
                 }
                 if (val != null)
                     c.setValue(val);
