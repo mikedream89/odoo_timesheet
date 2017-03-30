@@ -29,7 +29,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +45,6 @@ import com.odoo.core.orm.fields.utils.DomainFilterParser;
 import com.odoo.core.utils.OResource;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class OForm extends LinearLayout {
     public static final String TAG = OForm.class.getSimpleName();
@@ -85,18 +83,6 @@ public class OForm extends LinearLayout {
         init(context, attrs, 0, 0);
     }
 
-    public void setEditable(Boolean editable) {
-        mEditable = editable;
-        if (mEditable) {
-            mFirstModeChange = true;
-        }
-        for (String key : mFormFieldControls.keySet()) {
-            OField control = mFormFieldControls.get(key);
-            control.setEditable(editable);
-        }
-        mFirstModeChange = false;
-    }
-
     private void init(Context context, AttributeSet attrs, int defStyleAttr,
                       int defStyleRes) {
         mFirstModeChange = true;
@@ -120,20 +106,32 @@ public class OForm extends LinearLayout {
         return mEditable;
     }
 
-    public void setModel(String model) {
-        mModel = model;
+    public void setEditable(Boolean editable) {
+        mEditable = editable;
+        if (mEditable) {
+            mFirstModeChange = true;
+        }
+        for (String key : mFormFieldControls.keySet()) {
+            OField control = mFormFieldControls.get(key);
+            control.setEditable(editable);
+        }
+        mFirstModeChange = false;
     }
 
     public String getModel() {
         return mModel;
     }
 
-    public void setData(ODataRow record) {
-        initForm(record);
+    public void setModel(String model) {
+        mModel = model;
     }
 
     public ODataRow getData() {
         return mRecord;
+    }
+
+    public void setData(ODataRow record) {
+        initForm(record);
     }
 
     public void initForm(ODataRow record) {
@@ -174,12 +172,8 @@ public class OForm extends LinearLayout {
                 c.initControl();
                 Object val = c.getValue();
                 if (mRecord != null) {
-                    if (mRecord.contains(c.getFieldName())){
-                        if (column.getRelationType() == OColumn.RelationType.ManyToOne && !mRecord.get(c.getFieldName()).equals("false")) {
-                            val = ((List<Object>)mRecord.get(c.getFieldName())).get(1);
-                        } else {
-                            val = mRecord.get(c.getFieldName());
-                        }
+                    if (mRecord.contains(c.getFieldName())) {
+                        val = mRecord.get(c.getFieldName());
                     }
                 }
                 if (val != null)

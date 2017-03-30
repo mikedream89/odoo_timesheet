@@ -46,7 +46,7 @@ public class ODataRow implements Parcelable {
         if (_data.get(key).toString().equals("false"))
             return 0;
         else
-            return Integer.parseInt(_data.get(key).toString());
+            return (int)Float.parseFloat(_data.get(key).toString());
     }
 
     public Float getFloat(String key) {

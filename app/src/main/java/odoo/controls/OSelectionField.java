@@ -405,9 +405,12 @@ public class OSelectionField extends LinearLayout implements IOControlData,
                     if (row == null) {
                         row = new ODataRow();
                     }
+                } else if (mValue instanceof List) {
+                    row = new ODataRow();
+                    row.put(mModel.getDefaultNameColumn(), ((List<Object>)mValue).get(1));
                 } else {
                     if (!(mValue instanceof Boolean) && mValue != null && !mValue.toString().equals("false")) {
-                        int row_id =  Integer.parseInt(mValue.toString());
+                        int row_id = Integer.parseInt(mValue.toString());
                         row = getRecordData(row_id);
                     } else {
                         row = new ODataRow();
